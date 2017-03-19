@@ -1,10 +1,22 @@
 class Post < ActiveRecord::Base
 
-  validate :is_title_case 
-  before_validation :make_title_case 
+  validate :is_title_case
+  before_validation :make_title_case
   belongs_to :author
 
   #put new code here
+
+  def self.by_author(id)
+    self.where(author_id: id)
+  end
+
+  def self.from_today
+    self.where("created_at >= ?", Time.zone.now.beginning_of_day)
+  end
+
+  def self.old_news
+    self.where("created_at < ?", Time.zone.now.beginning_of_day)
+  end
 
   private
 
